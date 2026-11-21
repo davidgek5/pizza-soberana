@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#005E44">
+<meta name="description" content="Menú digital de Pizza Soberana: pizzas, combos, calzones, hamburguesas, alitas, hotdogs y bebidas.">
+<link rel="icon" href="logo.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} body{margin:0} img{max-width:100%} [hidden]{display:none!important}</style>
+<title>Pizza Soberana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: una sola columna centrada (máx. 560px), cabecera verde con logo, promos del día, barra de categorías fija y carta con puntos guía */
+:root {
+  /* Colores del logo de Pizza Soberana */
+  --mozzarella: #FFFFFF;   /* fondo */
+  --albahaca: #0B3B2C;     /* texto principal (verde oscuro) */
+  --albahaca-hondo: #005E44; /* verde del logo: cabecera y ficha */
+  --tomate: #D7101F;       /* rojo del logo: precios */
+  --amarillo: #FFD500;     /* amarillo del logo: filetes y destacados */
+  --corteza: #F08C00;      /* naranja de la masa: detalles */
+  --harina: #5E6A64;       /* descripciones */
+  --masa: #F1F5F2;         /* casillas de precio */
+  --crema: #FFF7D1;        /* fondo de la promo */
+  --linea: #DDE5E0;
+  --sobre-verde: #FFFFFF;
+  --sobre-verde-suave: #CDE6DA;
+  --font-display: "Archivo", "Arial Black", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fondo: #F4ECE3;
+  --tinta: #2B1D16;
+  --tinta-suave: #6F6158;
+  --vidrio: rgba(255,255,255,.58);
+  --vidrio-borde: rgba(255,255,255,.75);
+  --sombra: 0 10px 30px rgba(90,45,20,.10);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--mozzarella);
+  color: var(--albahaca);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px); z-index: 10;
+  background: var(--mozzarella);
+}
+.wrap {
+  max-width: 560px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Cabecera */
+.hero {
+  background: var(--albahaca-hondo);
+  color: var(--sobre-verde);
+  margin-top: calc(-1 * env(safe-area-inset-top, 0px));
+  padding-top: calc(env(safe-area-inset-top, 0px) + 2rem);
+  padding-bottom: 1.75rem;
+  text-align: center;
+  border-bottom: 5px solid var(--amarillo);
+  box-shadow: inset 0 -5px 0 var(--tomate);
+}
+.hero .ejemplo {
+  display: inline-block; font-size: .75rem; color: var(--sobre-verde-suave);
+  border: 1px solid rgba(255,255,255,.25); border-radius: 999px;
+  padding: .15rem .6rem; margin-bottom: 1rem;
+}
+.hero h1 { margin: 0; line-height: 0; }
+.hero h1 img { width: min(320px, 82vw); height: auto; }
+.hero p { margin: .6rem 0 0; color: var(--sobre-verde-suave); font-size: .95rem; }
+
+/* Promos */
+.promos { padding-block: 1.75rem .5rem; }
+.promos-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: .9rem; }
+.promos-head h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; margin: 0; }
+.promos-head span { color: var(--harina); font-size: .9rem; }
+.carrusel {
+  display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; padding-bottom: 4px;
+}
+.carrusel::-webkit-scrollbar { display: none; }
+.promo {
+  flex: 0 0 100%; scroll-snap-align: center;
+  background: var(--crema); border: 2px solid var(--amarillo); border-radius: 14px;
+  padding: 1.25rem 1.25rem 1.1rem;
+  display: grid; gap: .35rem;
+}
+.promo h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; margin: 0; line-height: 1.25; }
+.promo .detalle { color: var(--harina); font-size: .95rem; margin: 0; }
+.promo .precios { display: flex; align-items: baseline; gap: .75rem; margin-top: .5rem; font-variant-numeric: tabular-nums; }
+.promo .antes { color: var(--harina); text-decoration: line-through; font-size: 1rem; }
+.promo .ahora { color: var(--tomate); font-weight: 700; font-size: 1.75rem; line-height: 1; }
+.promo .ahorro { margin-left: auto; font-size: .8rem; font-weight: 600; color: var(--albahaca); background: var(--mozzarella); border-radius: 999px; padding: .2rem .6rem; }
+.promo .etiqueta { font-weight: 600; color: var(--albahaca); }
+.promo .ahora { font-size: 2.1rem; }
+.promo .ejemplo-promo { font-size: .88rem; color: var(--albahaca); background: var(--mozzarella); border-radius: 8px; padding: .45rem .7rem; margin-top: .4rem; font-variant-numeric: tabular-nums; }
+.promo .vigencia { font-size: .85rem; color: var(--harina); margin-top: .35rem; }
+.puntos { display: flex; justify-content: center; gap: 8px; margin-top: .75rem; }
+.puntos button {
+  width: 8px; height: 8px; border-radius: 50%; border: 0; padding: 0;
+  background: var(--linea); cursor: pointer;
+}
+.puntos button[aria-current="true"] { background: var(--albahaca); }
+
+/* Barra de categorías */
+.cats {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--mozzarella); border-bottom: 1px solid var(--linea);
+  margin-top: 1.25rem;
+}
+.cats .wrap { display: flex; gap: 8px; overflow-x: auto; padding-block: .7rem; scrollbar-width: none; }
+.cats .wrap::-webkit-scrollbar { display: none; }
+.cats a {
+  flex: 0 0 auto; text-decoration: none; color: var(--albahaca);
+  font-weight: 500; font-size: .95rem;
+  padding: .45rem .95rem; border-radius: 999px; background: var(--masa);
+}
+.cats a.activa { background: var(--tomate); color: #FFFFFF; }
+
+/* Carta */
+.seccion { padding-block: 1.5rem .5rem; }
+.seccion-head { border-bottom: 3px solid var(--amarillo); padding-bottom: .5rem; margin-bottom: .25rem; }
+.precios4 small.porc { margin-top: .1rem; font-size: .66rem; }
+.porciones { list-style: none; margin: .7rem 0 .15rem; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; text-align: center; }
+.porciones li { font-size: .72rem; color: var(--harina); line-height: 1.25; }
+.porciones strong { display: block; font-family: var(--font-display); font-size: 1.15rem; color: var(--albahaca); }
+.porciones span { display: block; font-weight: 600; }
+.subseccion { padding-block: 1.5rem .5rem; }
+.subseccion .seccion-head { border-bottom: 2px solid var(--amarillo); }
+.subseccion h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; margin: 0; line-height: 1.2; }
+.seccion h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; margin: 0; line-height: 1.2; }
+.tamanos, .precios4 {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+  font-variant-numeric: tabular-nums; text-align: center;
+}
+.tamanos { font-size: .78rem; color: var(--harina); font-weight: 600; margin-top: .6rem; }
+.items { list-style: none; margin: 0; padding: 0; }
+.item { padding: .9rem .7rem; margin-inline: -.7rem; position: relative; border-radius: 12px; }
+.item::after { content: ""; position: absolute; left: .7rem; right: .7rem; bottom: 0; height: 1px; background: var(--linea); }
+.item:last-child::after { display: none; }
+.nombre { font-family: var(--font-display); font-weight: 700; font-size: 1.12rem; line-height: 1.25; margin: 0; }
+.desc { color: var(--harina); font-size: .93rem; margin: .15rem 0 .55rem; }
+.precios4 span { background: var(--masa); border-radius: 8px; padding: .4rem 0; color: var(--tomate); font-weight: 700; font-size: .98rem; }
+.precios4 span.nohay { color: var(--harina); font-weight: 400; }
+.precios4 small { display: block; color: var(--harina); font-weight: 500; font-size: .68rem; line-height: 1.2; }
+.fila { display: flex; align-items: baseline; gap: .5rem; }
+.guia { flex: 1; min-width: 1rem; }
+.precio-uno { color: var(--tomate); font-weight: 700; font-variant-numeric: tabular-nums; }
+.provisional { font-size: .85rem; color: var(--harina); font-style: italic; margin: .5rem 0 0; }
+.marcas { display: inline-flex; gap: 4px; margin-left: .4rem; vertical-align: 3px; }
+.marca { font-family: var(--font-body); font-size: .7rem; font-weight: 600; padding: .05rem .45rem; border-radius: 999px; border: 1px solid currentColor; }
+.m-pedida { color: var(--corteza); }
+.m-veggie { color: #4F8A5B; }
+
+.leyenda { display: flex; flex-wrap: wrap; gap: .5rem 1rem; font-size: .85rem; color: var(--harina); padding-block: 1.5rem; }
+.leyenda div { display: flex; align-items: center; gap: .4rem; }
+
+/* Pie */
+.pie { background: var(--masa); margin-top: 1rem; padding-block: 2rem 2.5rem; }
+.pie h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; margin: 0 0 1rem; }
+.datos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; font-size: .93rem; }
+.datos dt { color: var(--harina); font-size: .8rem; font-weight: 600; }
+.datos dd { margin: .1rem 0 0; }
+.locales { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.locales li { background: var(--mozzarella); border-radius: 12px; padding: .8rem .9rem; min-width: 0; }
+.locales h3 { font-family: var(--font-display); font-weight: 800; font-size: 1rem; margin: 0 0 .2rem; color: var(--albahaca-hondo); }
+.locales p { margin: 0; font-size: .9rem; color: var(--harina); }
+.locales .tel { margin-top: .35rem; color: var(--albahaca); font-weight: 600; font-variant-numeric: tabular-nums; }
+@media (max-width: 420px) { .locales { grid-template-columns: 1fr; } }
+.nota { margin-top: 1.5rem; font-size: .8rem; color: var(--harina); }
+@media (max-width: 380px) { .datos { grid-template-columns: 1fr; } }
+
+a:focus-visible, button:focus-visible { outline: 2px solid var(--corteza); outline-offset: 2px; }
+/* Ficha ampliada */
+.tocable { cursor: pointer; transition: background-color .15s; }
+.tocable:hover { background: var(--crema); }
+.tocable:hover::after { display: none; }
+.tocable:active { background: var(--crema); }
+.tocable:focus-visible { outline: 2px solid var(--corteza); outline-offset: 2px; }
+.ver { font-family: var(--font-body); font-size: .78rem; font-weight: 600; color: var(--harina); float: right; margin-top: .3rem; }
+dialog.ficha {
+  border: 0; padding: 0; margin: auto auto 0; width: 100%; max-width: 560px;
+  max-height: 92vh; overflow: auto; border-radius: 22px 22px 0 0;
+  background: var(--mozzarella); color: var(--albahaca);
+  box-shadow: 0 -8px 40px rgba(0,0,0,.25);
+}
+dialog.ficha::backdrop { background: rgba(20,26,22,.55); }
+dialog.ficha[open] { animation: subir .28s cubic-bezier(.2,.8,.2,1); }
+@keyframes subir { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (min-width: 600px) { dialog.ficha { margin: auto; border-radius: 22px; } }
+@media (prefers-reduced-motion: reduce) { dialog.ficha[open] { animation: none; } }
+.ficha-top { background: var(--albahaca-hondo); color: var(--sobre-verde); border-bottom: 5px solid var(--amarillo);
+  padding: 1.6rem max(20px, env(safe-area-inset-right, 0px)) 1.3rem max(20px, env(safe-area-inset-left, 0px)); position: relative; }
+.ficha-top .seccion-nombre { font-size: .85rem; color: var(--sobre-verde-suave); }
+.ficha-top h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 9vw, 2.6rem); line-height: 1.05; margin: .2rem 0 0; padding-right: 2.5rem; text-wrap: balance; }
+.ficha-top .marca { color: var(--sobre-verde-suave); margin-top: .6rem; display: inline-block; }
+.cerrar { position: absolute; top: 1rem; right: max(16px, env(safe-area-inset-right, 0px)); width: 40px; height: 40px; border-radius: 50%;
+  border: 0; background: rgba(255,255,255,.14); color: var(--sobre-verde); font-size: 1.4rem; line-height: 1; cursor: pointer; }
+.ficha-cuerpo { padding: 1.4rem max(20px, env(safe-area-inset-right, 0px)) calc(1.6rem + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px)); display: grid; gap: 1.4rem; }
+.ficha-cuerpo h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; margin: 0 0 .6rem; }
+.ingredientes { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.ingredientes li { background: var(--masa); border-radius: 999px; padding: .4rem .85rem; font-size: 1rem; }
+.ficha-precios { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.ficha-precios div { background: var(--masa); border-radius: 14px; padding: .85rem 1rem; display: grid; gap: .1rem; }
+.ficha-precios span { font-size: .85rem; color: var(--harina); font-weight: 600; }
+.ficha-precios strong { font-size: 1.6rem; color: var(--tomate); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.ficha-precios small { font-size: .8rem; color: var(--harina); font-variant-numeric: tabular-nums; }
+.ficha-precios .nohay strong { color: var(--harina); font-size: 1.05rem; font-weight: 500; }
+.ficha-precios .uno { grid-column: 1 / -1; }
+.ficha-precios .uno strong { font-size: 2rem; }
+.salsas { margin-bottom: .5rem; }
+.aviso-salsas { list-style: none; margin: .2rem 0 .9rem; padding: .7rem 1rem; display: grid; gap: .3rem; background: var(--crema); border: 2px solid var(--amarillo); border-radius: 12px; font-size: .95rem; }
+.aviso-salsas strong { color: var(--tomate); }
+.ver-uno { position: absolute; right: .7rem; bottom: .95rem; float: none; margin: 0; }
+.item:has(.ver-uno) .desc { padding-right: 2.5rem; }
+.ficha-promo { background: var(--crema); border: 2px solid var(--amarillo); border-radius: 14px; padding: .8rem 1rem; font-size: .93rem; }
+.ficha-promo b { color: var(--tomate); display: block; margin-bottom: .4rem; }
+.lista-promos { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; }
+.lista-promos li { padding-left: 1.1rem; position: relative; }
+.lista-promos li::before { content: ""; position: absolute; left: 0; top: .55em; width: .5rem; height: .5rem; border-radius: 50%; background: var(--tomate); }
+/* ===== Estilo vidrio (glass) ===== */
+body { background: var(--fondo); color: var(--tinta); }
+body::before { background: transparent; }
+.fondo { position: fixed; inset: 0; z-index: -1; pointer-events: none; background:
+  radial-gradient(45% 35% at 8% 6%, rgba(227,18,30,.30), transparent 70%),
+  radial-gradient(40% 30% at 95% 18%, rgba(255,193,0,.42), transparent 70%),
+  radial-gradient(50% 40% at 85% 75%, rgba(240,120,40,.28), transparent 70%),
+  radial-gradient(55% 45% at 5% 85%, rgba(0,94,68,.22), transparent 70%),
+  linear-gradient(180deg, #F7EFE6, #F1E6DA); }
+
+.hero { background: transparent; border: 0; box-shadow: none; margin-top: 0; padding-top: 1rem; padding-bottom: .25rem; }
+.hero-card { position: relative; overflow: hidden; border-radius: 28px; padding: 1.75rem 1rem 1.4rem;
+  background: linear-gradient(140deg, #0A7A57 0%, #005E44 55%, #00402E 100%);
+  box-shadow: 0 18px 40px rgba(0,70,50,.28), inset 0 1px 0 rgba(255,255,255,.18); }
+.hero-card::before { content: ""; position: absolute; width: 220px; height: 220px; right: -70px; top: -90px; border-radius: 50%; border: 22px solid rgba(255,213,0,.16); }
+.hero-card::after { content: ""; position: absolute; width: 160px; height: 160px; left: -60px; bottom: -80px; border-radius: 50%; background: rgba(227,18,30,.22); filter: blur(10px); }
+.hero-card > * { position: relative; z-index: 1; }
+.hero p { color: rgba(255,255,255,.9); font-weight: 500; }
+
+.promos-head h2, .seccion h2, .subseccion h2, .pie h2 { color: var(--tinta); }
+.promos-head span { background: var(--vidrio); border: 1px solid var(--vidrio-borde); border-radius: 999px; padding: .2rem .7rem; color: var(--tinta); font-weight: 600; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.promo { position: relative; overflow: hidden; border: 0; border-radius: 26px; color: #FFFFFF; padding: 1.4rem 1.3rem 1.25rem;
+  background: linear-gradient(135deg, #E3121E 0%, #EF4A26 55%, #F7931E 100%);
+  box-shadow: 0 16px 36px rgba(227,18,30,.28), inset 0 1px 0 rgba(255,255,255,.25); }
+.promo::after { content: ""; position: absolute; width: 150px; height: 150px; right: -36px; bottom: -46px; border-radius: 50%; border: 14px solid rgba(255,255,255,.22); pointer-events: none; }
+.promo > * { position: relative; z-index: 1; }
+.carrusel { padding: 6px 8px 26px; margin: -6px -8px -14px; scroll-padding-inline: 8px; }
+.promo { box-shadow: 0 10px 22px rgba(227,18,30,.22), inset 0 1px 0 rgba(255,255,255,.25); }
+.promo h3 { color: #FFFFFF; font-size: 1.35rem; }
+.promo .detalle, .promo .vigencia { color: rgba(255,255,255,.88); }
+.promo .ahora { color: #FFFFFF; font-size: 2.8rem; font-family: var(--font-display); font-weight: 800; }
+.promo .etiqueta { color: #FFFFFF; }
+.promo .vigencia { display: inline-block; justify-self: start; background: rgba(255,255,255,.2); border-radius: 999px; padding: .25rem .75rem; margin-top: .6rem; }
+.puntos button { background: rgba(43,29,22,.18); }
+.puntos button[aria-current="true"] { background: var(--tomate); }
+
+.cats { background: rgba(247,239,230,.72); border-bottom: 1px solid rgba(255,255,255,.6); backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
+.cats a { background: var(--vidrio); border: 1px solid var(--vidrio-borde); color: var(--tinta); box-shadow: 0 2px 8px rgba(90,45,20,.06); }
+.cats a.activa { background: #2B1D16; border-color: #2B1D16; color: #FFFFFF; }
+
+.seccion-head { border-bottom: 0; padding-bottom: .2rem; }
+.seccion h2 { font-size: 1.9rem; }
+.porciones { background: var(--vidrio); border: 1px solid var(--vidrio-borde); border-radius: 18px; padding: .7rem .4rem; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.porciones strong { color: var(--tomate); }
+.porciones li, .porciones span { color: var(--tinta-suave); }
+
+.items { display: grid; gap: 12px; padding-top: .7rem; }
+.item { margin: 0; padding: 1rem 1.05rem; border-radius: 22px; background: var(--vidrio); border: 1px solid var(--vidrio-borde);
+  box-shadow: var(--sombra); backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); }
+.item::after { display: none; }
+.tocable { transition: transform .18s ease, box-shadow .18s ease; }
+.tocable:hover { background: rgba(255,255,255,.72); transform: translateY(-2px); box-shadow: 0 14px 34px rgba(90,45,20,.14); }
+.tocable:active { transform: scale(.99); }
+@media (prefers-reduced-motion: reduce) { .tocable, .tocable:hover { transition: none; transform: none; } }
+.nombre { color: var(--tinta); }
+.desc { color: var(--tinta-suave); }
+.precios4 span { background: rgba(255,255,255,.75); border: 1px solid rgba(255,255,255,.9); border-radius: 14px; box-shadow: 0 2px 6px rgba(90,45,20,.05); }
+.precios4 small { color: var(--tinta-suave); }
+.ver { background: #FFFFFF; color: var(--tinta); border-radius: 999px; padding: .15rem .65rem; box-shadow: 0 3px 10px rgba(90,45,20,.12); margin-top: 0; }
+.ver-uno { right: 1.05rem; bottom: 1rem; }
+.item:has(.ver-uno) .desc { padding-right: 3rem; }
+.provisional { color: var(--tinta-suave); }
+.ingredientes li { background: rgba(255,255,255,.75); border: 1px solid rgba(255,255,255,.9); }
+.aviso-salsas { background: rgba(255,213,0,.22); border: 1px solid rgba(255,213,0,.6); }
+
+dialog.ficha { background: rgba(250,244,238,.86); backdrop-filter: blur(24px) saturate(150%); -webkit-backdrop-filter: blur(24px) saturate(150%); color: var(--tinta); box-shadow: 0 -12px 50px rgba(60,30,10,.25); }
+dialog.ficha::backdrop { background: rgba(43,29,22,.35); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.ficha-top { background: linear-gradient(140deg, #0A7A57, #005E44 60%, #00402E); border-bottom: 0; }
+.ficha-precios div { background: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.95); box-shadow: 0 4px 14px rgba(90,45,20,.06); }
+.ficha-precios span, .ficha-precios small { color: var(--tinta-suave); }
+.ficha-promo { background: linear-gradient(135deg, rgba(227,18,30,.10), rgba(247,147,30,.14)); border: 1px solid rgba(227,18,30,.25); }
+
+.pie { background: transparent; padding-block: 1.5rem 2.5rem; }
+.pie .wrap > * { position: relative; }
+.pie h2 { margin-bottom: .8rem; }
+.locales li { background: var(--vidrio); border: 1px solid var(--vidrio-borde); border-radius: 20px; box-shadow: var(--sombra); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+.locales h3 { color: var(--albahaca-hondo); }
+.locales p { color: var(--tinta-suave); }
+.locales .tel { color: var(--tinta); }
+/* Fotos de productos */
+.con-foto { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: .9rem; align-items: start; }
+.con-foto .foto { width: 96px; height: 96px; object-fit: cover; border-radius: 16px; box-shadow: 0 6px 16px rgba(90,45,20,.18); background: var(--masa); }
+.con-foto .cuerpo { min-width: 0; }
+.con-foto .fila { flex-direction: column; align-items: flex-start; gap: .1rem; }
+.con-foto .guia { display: none; }
+.ficha-foto { width: 100%; aspect-ratio: 3 / 2; max-width: 100%; object-fit: cover; border-radius: 20px; box-shadow: 0 10px 26px rgba(90,45,20,.18); }
+</style>
+</head>
+<body>
+
+
+<div class="fondo" aria-hidden="true"></div>
+<header class="hero">
+  <div class="wrap"><div class="hero-card">
+    <h1><img src="logo.png" alt="Pizza Soberana" width="352" height="150"></h1>
+    <p>Pizzas, combos, hamburguesas y alitas</p>
+  </div></div>
+</header>
+
+<section class="promos" aria-labelledby="promos-titulo">
+  <div class="wrap">
+    <div class="promos-head">
+      <h2 id="promos-titulo">Promos de hoy</h2>
+      <span id="dia-hoy"></span>
+    </div>
+    <div class="carrusel" id="carrusel"></div>
+    <div class="puntos" id="puntos" aria-label="Elegir promo"></div>
+  </div>
+</section>
+
+<nav class="cats" aria-label="Categorías">
+  <div class="wrap" id="cats"></div>
+</nav>
+
+<main class="wrap" id="carta"></main>
+
+
+<dialog class="ficha" id="ficha" aria-labelledby="ficha-nombre">
+  <div class="ficha-top">
+    <div class="seccion-nombre" id="ficha-seccion"></div>
+    <h2 id="ficha-nombre"></h2>
+    <span id="ficha-marca"></span>
+    <button type="button" class="cerrar" id="ficha-cerrar" aria-label="Cerrar">×</button>
+  </div>
+  <div class="ficha-cuerpo">
+    <img class="ficha-foto" id="ficha-foto" alt="" hidden>
+    <section><h3 id="ficha-tit-ing">Ingredientes</h3><div id="ficha-ingredientes"></div></section>
+    <section><h3 id="ficha-tit-pre">Precios</h3><div class="ficha-precios" id="ficha-precios"></div></section>
+    <div class="ficha-promo" id="ficha-promo"><b>Promos en pizzas Medianas y Familiares</b>
+      <ul class="lista-promos">
+        <li><strong>Todos los días:</strong> la segunda a mitad de precio</li>
+        <li><strong>Martes:</strong> 2×1</li>
+      </ul></div>
+  </div>
+</dialog>
+
+<footer class="pie">
+  <div class="wrap">
+    <h2>Pedidos y locales</h2>
+    <ul class="locales">
+      <li><h3>Matriz Los Ceibos</h3><p>Av. El Retorno y Río Amazonas</p><p class="tel">06 260 5000 · 093 920 7004</p></li>
+      <li><h3>Sucursal 1</h3><p>Bolívar 9-62 y Colón</p><p class="tel">093 911 2651</p></li>
+      <li><h3>Sucursal 2</h3><p>Av. Fray Vacas Galindo y Carlos Elías Almeida</p><p class="tel">098 650 0609</p></li>
+      <li><h3>Sucursal 3</h3><p>Tobías Mena</p><p class="tel">099 334 0800</p></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+const DIAS = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+
+// Promos: "dias" usa 0 = domingo ... 6 = sábado (promos de EJEMPLO)
+const PROMOS = [
+  { titulo: "Martes loco 2×1", detalle: "Solo en pizzas. Llevas 2 pizzas Medianas o Familiares y pagas solo 1.",
+    grande: "2×1", etiqueta: "en Medianas y Familiares",
+    dias: [2], vigencia: "Todo el día martes, de apertura a cierre" },
+  { titulo: "La segunda a mitad de precio", detalle: "En pizzas Medianas y Familiares. Pagas la primera completa y la segunda al 50%.",
+    grande: "50%", etiqueta: "en la 2da pizza",
+    dias: [0,1,2,3,4,5,6], vigencia: "Todos los días, de lunes a domingo" }
+];
+
+const TAMANOS = ["Gigante","Familiar","Mediana","Personal"];
+const PORCIONES = [16, 12, 8, 4];
+const llevaPorciones = (sec, it) => sec.id === "clasicas" || it.n === "Un ingrediente";
+const CARTA = [
+  { id: "clasicas", corto: "Pizzas", nombre: "Pizzas", items: [
+    { n: "Soberana", d: "Queso, peperoni, jamón, champiñones, carne, pimiento, cebolla, tocino y extra queso.", p: [30.99,20.99,18.99,5.99] },
+    { n: "Cavernícola", d: "Queso, peperoni, jamón, carne, pollo, tocino y extra queso.", p: [28.99,19.99,17.99,4.99] },
+    { n: "Vegetariana", d: "Queso, champiñones, cebolla, pimiento, aceitunas, maíz dulce, tomate y extra queso.", p: [28.99,19.99,16.99,4.99] },
+    { n: "Montecarlo", d: "Queso, tocino, maíz dulce y extra queso.", p: [25.99,16.99,14.49,3.49] },
+    { n: "Americana", d: "Queso, peperoni, jamón, champiñones y extra queso.", p: [25.99,16.99,14.49,3.49] },
+    { n: "Italiana", d: "Queso, pollo, cebolla, pimiento, tomate y extra queso.", p: [25.99,16.99,14.49,3.49] },
+    { n: "Campesina", d: "Queso, pollo, champiñones, tomate y extra queso.", p: [25.99,16.99,14.49,3.49] },
+    { n: "4 Estaciones", d: "Queso, 1/4 jamón, 1/4 peperoni, 1/4 pollo y 1/4 champiñones.", p: [25.99,16.99,14.49,null] },
+    { n: "Hawayana", d: "Queso, piña, jamón y extra queso.", p: [25.99,16.99,14.49,3.49] },
+    { n: "Frutare", d: "Queso, piña, durazno y extra queso.", p: [25.99,16.99,14.49,3.49] },
+    { n: "Chocolate", d: "Chocolate y fresas.", p: [22.99,14.99,14.49,2.00] },
+    { n: "Chococheese", d: "Queso, chocolate y fresas.", p: [25.99,16.99,14.49,3.49] }
+  ]},
+  { id: "arma", sub: true, grupo: "clasicas", corto: "Arma la tuya", nombre: "Arma la tuya", items: [
+    { n: "Un ingrediente", d: "Queso más el ingrediente que prefieras.", p: [19.99,13.49,11.99,2.00] },
+    { n: "Ingrediente adicional", d: "Súmalo a cualquier pizza.", p: [3.50,2.00,1.50,1.00] }
+  ]},
+  { id: "combos", corto: "Combos", nombre: "Combos", detalle: "Incluye", items: [
+    { n: "Combo para compartir", d: "Pizza mediana, 6 alitas con papas y cola de litro.", p: [16.99] },
+    { n: "Combo familiar", d: "Pizza familiar, 6 alitas con papas y cola de litro.", p: [19.99] },
+    { n: "Combo ideal", d: "2 hot dogs simples, 2 colas personales y 1 porción de papas.", p: [4.99] },
+    { n: "Super combo", d: "1 hamburguesa, 4 alitas, papas y cola personal.", p: [6.99] },
+    { n: "Promo hamburguesas", d: "2 hamburguesas, papas, 2 colas personales y 8 alitas.", p: [12.49] }
+  ]},
+  { id: "calzones", corto: "Calzones", nombre: "Calzones", items: [
+    { n: "Calzone Salado", d: "Queso, atún, pimiento, tomate y extra queso.", p: [null,16.99,14.49,3.49] },
+    { n: "Calzone Dulce", d: "Mermelada, queso, piña y durazno.", p: [null,16.99,14.49,3.49] }
+  ]},
+  { id: "hamburguesas", corto: "Hamburguesas", nombre: "Hamburguesas", items: [
+    { n: "Hamburguesa simple", d: "Pan, lechuga, tomate, carne de 150 g, queso y salsas.", p: [2.99], img: "img/hamburguesa-simple.jpg" },
+    { n: "Hamburguesa Hawayana", d: "Pan, carne de 150 g, queso, piña, tocino, cebolla caramelizada y salsas.", p: [3.49], img: "img/hamburguesa-hawayana.jpg" },
+    { n: "Hamburguesa Champiñones", d: "Pan, lechuga, tomate, carne de 150 g, champiñones, queso, cebolla caramelizada y salsas.", p: [3.49], img: "img/hamburguesa-champinones.jpg" },
+    { n: "Hamburguesa doble", d: "Pan, lechuga, tomate, carne de 300 g, doble queso, jamón, cebolla caramelizada y salsas.", p: [4.49], img: "img/hamburguesa-doble.jpg" },
+    { n: "Papas y cola", d: "Adicional para tu hamburguesa.", p: [1.50], sinFicha: true }
+  ]},
+  { id: "alitas", corto: "Alitas", nombre: "Alitas", detalle: "Incluye", items: [
+    { n: "Alitas porción personal", d: "3+3 alitas, papas y salsas.", p: [4.99] },
+    { n: "Alitas porción mediana", d: "6+6 alitas, papas y salsas.", p: [7.49] },
+    { n: "Alitas porción familiar", d: "10+10 alitas, papas y salsas.", p: [11.49] },
+    { n: "Alitas porción gigante", d: "15+15 alitas, papas y salsas.", p: [14.99] }
+  ]},
+  { id: "salsas", sub: true, grupo: "alitas", nombre: "Salsas", items: [],
+    aviso: ["<strong>Porción personal:</strong> 2 sabores", "<strong>Porción mediana, familiar y gigante:</strong> 3 sabores"],
+    chips: ["BBQ", "Miel y mostaza", "Tamarindo", "Maracuyá", "Mango", "Queso parmesano", "Limón y pimienta", "Mora", "Picante"] },
+  { id: "hotdogs", corto: "Hotdogs y papas", nombre: "Hotdogs y papas", items: [
+    { n: "Hotdog simple", d: "Cebolla, tomate, salsas y papitas.", p: [1.49] },
+    { n: "Hotdog + cola", d: "Cebolla, tomate, salsas y papitas.", p: [1.99] },
+    { n: "Salchipapa", d: "", p: [1.99] },
+    { n: "Papicarne", d: "", p: [2.49] },
+    { n: "Papipollo", d: "", p: [2.49] },
+    { n: "Papimixta", d: "", p: [2.99] }
+  ]},
+  { id: "adicionales", sub: true, grupo: "hotdogs", nombre: "Adicionales", items: [
+    { n: "Porción de papas", d: "", p: [1.50] },
+    { n: "Huevo, piña, cebolla, champiñón, etc.", d: "Cada adicional.", p: [0.50], sinFicha: true },
+    { n: "Carne o pollo", d: "Adicional.", p: [1.00], sinFicha: true }
+  ]},
+  { id: "bebidas", corto: "Bebidas", sinFicha: true, nombre: "Bebidas", items: [
+    { n: "Gaseosa personal", d: "Sabores: Coca-Cola, Fanta, Sprite y Fiora.", p: [0.50] },
+    { n: "Gaseosa 1,35 L", d: "Sabores: Coca-Cola, Fanta, Sprite y Fiora.", p: [2.00] },
+    { n: "Coca-Cola 3 L", d: "Sabor Coca-Cola.", p: [3.75] },
+    { n: "Agua 600 ml", d: "Sin gas.", p: [0.75] },
+    { n: "Jugo natural", d: "Sabores: limonada, jamaica, guanábana, mora, fresa, mango, maracuyá, naranjilla, tomate de árbol y sandía.", p: [1.25] },
+    { n: "Batidos", d: "Sabores: guanábana, mora, fresa, mango, maracuyá, naranjilla y tomate de árbol.", p: [1.50] }
+  ]}
+];
+
+const MARCAS = { veggie: ["Sin carne","m-veggie"] };
+const $ = s => document.querySelector(s);
+const plata = v => v === 0 ? "Gratis" : "$" + v.toFixed(2);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// --- Promos del día ---
+const hoy = new Date().getDay();
+$("#dia-hoy").textContent = DIAS[hoy];
+let promosHoy = PROMOS.filter(p => p.dias.includes(hoy));
+if (!promosHoy.length) promosHoy = PROMOS.slice(0, 1);
+$("#carrusel").innerHTML = promosHoy.map(p => {
+  const ahorro = p.antes && p.antes > p.ahora ? Math.round((1 - p.ahora / p.antes) * 100) : 0;
+  return `<article class="promo">
+    <h3>${esc(p.titulo)}</h3>
+    <p class="detalle">${esc(p.detalle)}</p>
+    <div class="precios">
+      ${p.grande ? `<span class="ahora">${esc(p.grande)}</span><span class="etiqueta">${esc(p.etiqueta)}</span>` : `
+      ${p.antes ? `<span class="antes">${plata(p.antes)}</span>` : ""}
+      <span class="ahora">${plata(p.ahora)}</span>
+      ${ahorro ? `<span class="ahorro">Ahorras ${ahorro}%</span>` : ""}`}
+    </div>
+    ${p.ejemplo ? `<div class="ejemplo-promo">${esc(p.ejemplo)}</div>` : ""}
+    <div class="vigencia">${esc(p.vigencia)}</div>
+  </article>`;
+}).join("");
+
+const carrusel = $("#carrusel"), puntos = $("#puntos");
+if (promosHoy.length > 1) {
+  puntos.innerHTML = promosHoy.map((p, i) => `<button type="button" id="punto-${i}" aria-label="Promo ${i + 1}: ${esc(p.titulo)}"></button>`).join("");
+  const marcar = () => {
+    const i = Math.round(carrusel.scrollLeft / carrusel.clientWidth);
+    puntos.querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-current", j === i));
+  };
+  puntos.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    const i = [...puntos.children].indexOf(b);
+    carrusel.scrollTo({ left: i * carrusel.clientWidth, behavior: "smooth" });
+  });
+  carrusel.addEventListener("scroll", () => requestAnimationFrame(marcar), { passive: true });
+  marcar();
+} else {
+  puntos.hidden = true;
+}
+
+// --- Carta ---
+function partesDe(d) { return d.replace(/\.$/, "").split(/,\s*|\s+y\s+/).map(x => x.trim()).filter(Boolean); }
+const conFicha = (s, it) => !s.sinFicha && !it.sinFicha && !!it.d && partesDe(it.d).length > 1;
+$("#cats").innerHTML = CARTA.filter(s => !s.grupo).map(s => `<a href="#${s.id}" data-id="${s.id}">${esc(s.corto)}</a>`).join("");
+$("#carta").innerHTML = CARTA.map((s, si) => `
+  <section class="${s.sub ? "subseccion" : "seccion"}" id="${s.id}" data-grupo="${s.grupo || s.id}">
+    <div class="seccion-head">
+      <h2>${esc(s.nombre)}</h2>
+      ${s.id === "clasicas" ? `<ul class="porciones">${TAMANOS.map((t, i) => `<li><strong>${PORCIONES[i]}</strong> porciones <span>${t}</span></li>`).join("")}</ul>` : ""}
+    </div>
+    ${s.chips ? `<p class="desc">Elige tu salsa:</p>${s.aviso ? `<ul class="aviso-salsas">${s.aviso.map(a => `<li>${a}</li>`).join("")}</ul>` : ""}<ul class="ingredientes salsas">${s.chips.map(c => `<li>${esc(c)}</li>`).join("")}</ul>` : ""}
+    <ul class="items">
+      ${s.provisional ? `<p class="provisional">Lista provisional: bebidas y precios por confirmar.</p>` : ""}
+      ${s.items.map((it, ii) => it.p.length === 1 ? (conFicha(s, it)
+        ? `<li class="item tocable${it.img ? " con-foto" : ""}" tabindex="0" role="button" aria-haspopup="dialog" data-s="${si}" data-i="${ii}">`
+        : `<li class="item${it.img ? " con-foto" : ""}">`) + `
+        ${it.img ? `<img class="foto" src="${it.img}" alt="${esc(it.n)}" width="96" height="96" loading="lazy">` : ""}
+        ${it.img ? `<div class="cuerpo">` : ""}
+        <div class="fila"><h3 class="nombre">${esc(it.n)}</h3><span class="guia" aria-hidden="true"></span><span class="precio-uno">${plata(it.p[0])}</span></div>
+        ${it.d ? `<p class="desc">${esc(it.d)}</p>` : ""}
+        ${it.img ? `</div>` : ""}
+        ${conFicha(s, it) ? `<span class="ver ver-uno" aria-hidden="true">Ver</span>` : ""}
+      </li>` : `<li class="item tocable" tabindex="0" role="button" aria-haspopup="dialog" data-s="${si}" data-i="${ii}">
+        <h3 class="nombre"><span class="ver" aria-hidden="true">Ver</span>${esc(it.n)}${(it.m || []).length ? `<span class="marcas">${it.m.map(k => `<span class="marca ${MARCAS[k][1]}">${MARCAS[k][0]}</span>`).join("")}</span>` : ""}</h3>
+        <p class="desc">${esc(it.d)}</p>
+        <div class="precios4">
+          ${it.p.map((v, i) => v == null
+            ? `<span class="nohay"><small>${TAMANOS[i]}</small>—${llevaPorciones(s, it) ? `<small class="porc">${PORCIONES[i]} porciones</small>` : ""}</span>`
+            : `<span><small>${TAMANOS[i]}</small>${plata(v)}${llevaPorciones(s, it) ? `<small class="porc">${PORCIONES[i]} porciones</small>` : ""}</span>`).join("")}
+        </div>
+      </li>`).join("")}
+    </ul>
+  </section>`).join("");
+
+// Barra de categorías: muestra solo la categoría elegida
+const barra = document.querySelector(".cats");
+const filaCats = $("#cats");
+const enlaces = [...filaCats.querySelectorAll("a")];
+const bloques = [...document.querySelectorAll("#carta > section")];
+const reducir = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function mostrarCat(id, desplazar) {
+  bloques.forEach(sec => { sec.hidden = sec.dataset.grupo !== id; });
+  enlaces.forEach(a => {
+    const activa = a.dataset.id === id;
+    a.classList.toggle("activa", activa);
+    a.setAttribute("aria-current", activa ? "true" : "false");
+  });
+  const a = enlaces.find(x => x.dataset.id === id);
+  if (a) filaCats.scrollTo({ left: Math.max(0, a.offsetLeft - (filaCats.clientWidth - a.offsetWidth) / 2), behavior: reducir ? "auto" : "smooth" });
+  if (desplazar) {
+    // lleva la vista al inicio de la categoría elegida, justo debajo de la barra
+    const inicio = $("#carta").getBoundingClientRect().top + window.scrollY - barra.offsetHeight;
+    window.scrollTo({ top: Math.max(0, inicio), behavior: reducir ? "auto" : "smooth" });
+  }
+}
+filaCats.addEventListener("click", e => {
+  const a = e.target.closest("a"); if (!a) return;
+  e.preventDefault();
+  mostrarCat(a.dataset.id, true);
+});
+mostrarCat(enlaces[0].dataset.id, false);
+// --- Ficha ampliada ---
+const ficha = $("#ficha");
+const ingredientes = d => {
+  const t = d.replace(/\.$/, "");
+  const partes = t.split(/,\s*|\s+y\s+/).map(x => x.trim()).filter(Boolean);
+  return partes.map(x => x.charAt(0).toUpperCase() + x.slice(1));
+};
+const SECCIONES_PROMO = ["clasicas"];
+const esMartes = new Date().getDay() === 2;
+function abrirFicha(si, ii) {
+  const sec = CARTA[si], it = sec.items[ii];
+  $("#ficha-seccion").textContent = sec.nombre;
+  $("#ficha-nombre").textContent = it.n;
+  const foto = $("#ficha-foto");
+  if (it.img) { foto.src = it.img; foto.alt = it.n; foto.hidden = false; } else { foto.hidden = true; foto.removeAttribute("src"); }
+  $("#ficha-marca").innerHTML = (it.m || []).map(k => `<span class="marca">${MARCAS[k][0]}</span>`).join(" ");
+  const ing = ingredientes(it.d);
+  $("#ficha-tit-ing").textContent = sec.detalle || "Ingredientes";
+  $("#ficha-tit-pre").textContent = it.p.length > 1 ? "Precios" : "Precio";
+  $("#ficha-ingredientes").innerHTML = ing.length > 1
+    ? `<ul class="ingredientes">${ing.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
+    : `<p style="margin:0">${esc(it.d)}</p>`;
+  const promo = SECCIONES_PROMO.includes(sec.id);
+  const porc = llevaPorciones(sec, it);
+  $("#ficha-precios").innerHTML = it.p.length === 1
+    ? `<div class="uno"><strong>${plata(it.p[0])}</strong></div>`
+    : it.p.map((v, i) => v == null
+    ? `<div class="nohay"><span>${TAMANOS[i]}${porc ? ` · ${PORCIONES[i]} porciones` : ""}</span><strong>No disponible</strong></div>`
+    : `<div><span>${TAMANOS[i]}${porc ? ` · ${PORCIONES[i]} porciones` : ""}</span><strong>${plata(v)}</strong>${promo && (i === 1 || i === 2) ? `<small>${esMartes ? `Hoy 2×1: 2 por ${plata(v)}` : `La 2da: ${plata(Math.round(Math.round(v * 100) / 2) / 100)}`}</small>` : ""}</div>`).join("");
+  $("#ficha-promo").hidden = !promo;
+  ficha.showModal();
+  $("#ficha-cerrar").focus();
+}
+$("#carta").addEventListener("click", e => {
+  const li = e.target.closest(".tocable"); if (li) abrirFicha(+li.dataset.s, +li.dataset.i);
+});
+$("#carta").addEventListener("keydown", e => {
+  const li = e.target.closest(".tocable");
+  if (li && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); abrirFicha(+li.dataset.s, +li.dataset.i); }
+});
+$("#ficha-cerrar").addEventListener("click", () => ficha.close());
+ficha.addEventListener("click", e => { if (e.target === ficha) ficha.close(); });
+</script>
+
+</body>
+</html>
